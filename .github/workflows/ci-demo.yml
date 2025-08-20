@@ -1,4 +1,4 @@
-name: First CI Pipeline
+name: CI Pipeline for HTML/CSS/JS
 
 on:
   push:
@@ -14,5 +14,28 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Print Hello
-        run: echo "🎉 CI Pipeline Triggered Successfully!"
+      - name: Check HTML/CSS/JS files exist
+        run: |
+          echo "Checking if index.html exists..."
+          if [ -f index.html ]; then
+            echo "✅ index.html found!"
+          else
+            echo "❌ index.html missing!"
+            exit 1
+          fi
+
+          echo "Checking if style.css exists..."
+          if [ -f style.css ]; then
+            echo "✅ style.css found!"
+          else
+            echo "❌ style.css missing!"
+            exit 1
+          fi
+
+          echo "Checking if script.js exists..."
+          if [ -f script.js ]; then
+            echo "✅ script.js found!"
+          else
+            echo "❌ script.js missing!"
+            exit 1
+          fi
