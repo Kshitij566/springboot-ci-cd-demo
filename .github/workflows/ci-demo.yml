@@ -1,18 +1,30 @@
-name: First CI Pipeline
+name: Deploy to GitHub Pages
 
 on:
   push:
     branches:
-      - master
-      - main
+      - main   # or master if your repo uses master
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
 
 jobs:
-  demo-job:
+  deploy:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Print Hello
-        run: echo "🎉 CI Pipeline Triggered Successfully!"
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .   # this means your root folder (HTML/CSS/JS)
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
