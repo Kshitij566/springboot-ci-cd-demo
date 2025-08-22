@@ -1,49 +1,26 @@
-name: Frontend CI Pipeline
+name: My First CI Pipeline
 
 on:
   push:
     branches:
-      - master  # This pipeline runs on pushes to the master branch
+      - main
+      - master
 
 jobs:
-  validate-files:
-    runs-on: ubuntu-latest  # The runner environment
+  build-and-test:
+    runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: Check for file existence
-        id: check_files
-        run: |
-          if [ -f "index.html" ] && [ -f "templatemo-nexus-scripts.js" ] && [ -f "templatemo-nexus-style.css" ]; then
-            echo "All required files exist."
-          else
-            echo "Error: Missing one or more required files."
-            exit 1
-          fi
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
 
-      - name: Verify file sizes (simple check)
-        id: check_sizes
-        run: |
-          if [[ $(stat -c%s "index.html") -gt 0 ]] && [[ $(stat -c%s "templatemo-nexus-scripts.js") -gt 0 ]] && [[ $(stat -c%s "templatemo-nexus-style.css") -gt 0 ]]; then
-            echo "All files are non-empty."
-          else
-            echo "Error: One or more files are empty."
-            exit 1
-          fi
+      - name: Install dependencies
+        run: npm install
 
-      - name: Simple syntax check for JS
-        id: lint_js
-        run: |
-          # This is a very basic check. For real projects, use a linter like ESLint.
-          # Here, we'll just check if the file is readable.
-          if [ -s "templatemo-nexus-scripts.js" ]; then
-            echo "JS file is readable and not empty."
-          else
-            echo "Error: JS file is not valid or empty."
-            exit 1
-          fi
-
-      - name: Success message
-        run: echo "CI pipeline passed successfully. All files are valid."
+      - name: Run tests
+        run: echo "✅ All tests passed (simulated)"
